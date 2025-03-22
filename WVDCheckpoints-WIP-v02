@@ -1,0 +1,127 @@
+WVDCheckpoints
+| where UserName == "Niall.Jennings@abrdn.com"
+| sort by TimeGenerated desc
+| extend strParameters = tostring(Parameters)
+| extend FallBackReason = parse_json(strParameters).FallbackReason
+| extend CredSSPSecurityProtocol = parse_json(strParameters).CredSSPSecurityProtocol
+| extend ClientAuthDeferred = parse_json(strParameters).ClientAuthDeferred
+| extend DisconnectCode = parse_json(strParameters).DisconnectCode
+| extend DisconnectProxyCode = parse_json(strParameters).DisconnectProxyCode
+| extend DisconnectMessage = parse_json(strParameters).DisconnectMessage
+| extend DisconnectCodeSymbolic = parse_json(strParameters).DisconnectCodeSymbolic
+| extend DisconnectOperation = parse_json(strParameters).DisconnectOperation
+| extend IsInternal = parse_json(strParameters).IsInternal
+| extend IsUserInitiated = parse_json(strParameters).IsUserInitiated
+| extend IsProxyServerInitiated = parse_json(strParameters).IsProxyServerInitiated
+| extend IsServerStackInitiated = parse_json(strParameters).IsServerStackInitiated
+| extend PopErrorUI = parse_json(strParameters).PopErrorUI
+| extend TimeToDetectDisconnectActual = parse_json(strParameters).TimeToDetectDisconnectActual
+| extend TimeToDetectDisconnectNominal = parse_json(strParameters).TimeToDetectDisconnectNominal
+| extend EHNumRequests = parse_json(strParameters).EHNumRequests
+| extend EHNumResponses = parse_json(strParameters).EHNumResponses
+| extend EHNumErrors = parse_json(strParameters).EHNumErrors
+| extend EHCriticalRequests = parse_json(strParameters).EHCriticalRequests
+| extend EHHttpCodes = parse_json(strParameters).EHHttpCodes
+| extend EHErrorCodes = parse_json(strParameters).EHErrorCodes
+| extend Success = parse_json(strParameters).Success
+| extend DurationMS = parse_json(strParameters).DurationMS
+| extend CredentialType = parse_json(strParameters).CredentialType
+| extend SecurityProtocol = parse_json(strParameters).SecurityProtocol
+| extend LoadBalanceOutcome = parse_json(strParameters).LoadBalanceOutcome
+| extend StartVMOnConnect = parse_json(strParameters).StartVMOnConnect
+| extend StartVMOnConnectComputeAPIDuration = parse_json(strParameters).StartVMOnConnectComputeAPIDuration
+| extend SessionHostArmComputePath = parse_json(strParameters).SessionHostArmComputePath
+| extend disconnectSource = parse_json(strParameters).disconnectSource
+| extend codeSymbolic = parse_json(strParameters).codeSymbolic
+| extend NetworkConnectivityLevel = parse_json(strParameters).NetworkConnectivityLevel
+| extend ServiceConnectivityStatus = parse_json(strParameters).ServiceConnectivityStatus
+| extend ServiceConnectivityError = parse_json(strParameters).ServiceConnectivityError
+| extend codeSymbolic = parse_json(strParameters).codeSymbolic
+| extend WinLogon_Total = parse_json(strParameters).WinLogon_Total
+| extend WinLogon_Logon = parse_json(strParameters).WinLogon_Logon
+| extend WinLogonPid = parse_json(strParameters).WinLogonPid
+| extend WinLogon_Logon_SessionEnv = parse_json(strParameters).WinLogon_Logon_SessionEnv
+| extend WinLogon_Logon_Sens = parse_json(strParameters).WinLogon_Logon_Sens
+| extend LogonType = parse_json(strParameters).LogonType
+| extend UserLogon = parse_json(strParameters).UserLogon
+| extend PreviewTiles = parse_json(strParameters).PreviewTiles
+| extend Total = parse_json(strParameters).Total
+| extend parsedParams = parse_json(strParameters)
+| extend MicrosoftWindowsClientCBS = parsedParams["install::MicrosoftWindows.Client.CBS_cw5n1h2txyewy"]
+| extend MicrosoftWindowsShellExperienceHost = parsedParams["install::Microsoft.Windows.ShellExperienceHost_cw5n1h2txyewy"]
+| extend UpdatePCSettingsShellInit = parse_json(strParameters).UpdatePCSettingsShellInit
+| extend ShellHandwriting = parse_json(strParameters).ShellHandwriting
+| extend LaunchExperienceHostPostStart = parse_json(strParameters).LaunchExperienceHostPostStart
+| extend RemoveTempOOBEUser = parse_json(strParameters).RemoveTempOOBEUser
+| extend WSXRegistryInitPreStart = parse_json(strParameters).WSXRegistryInitPreStart
+| extend UndockedShellUpdate = parse_json(strParameters).UndockedShellUpdate
+| extend ActiveSetup = parse_json(strParameters).ActiveSetup
+| extend RunOnce = parse_json(strParameters).RunOnce
+| extend AssignedAccessAutoLaunch = parse_json(strParameters).AssignedAccessAutoLaunch
+| extend FamilySync = parse_json(strParameters).FamilySync
+| extend CreateYourPhoneShortcutsIfNeededPostStart = parse_json(strParameters).CreateYourPhoneShortcutsIfNeededPostStart
+| extend NotifyTrayStartIsReady = parse_json(strParameters).NotifyTrayStartIsReady
+| extend CloudDataUpdateProfileName = parse_json(strParameters).CloudDataUpdateProfileName
+| extend AppResolver = parse_json(strParameters).AppResolver
+| extend ShellInitTasks = parse_json(strParameters).ShellInitTasks
+| extend CDSDataMigration = parse_json(strParameters).CDSDataMigration
+| extend LaunchContentDeliveryManagerStart = parse_json(strParameters).LaunchContentDeliveryManagerStart
+| extend OEMFirstRunTelemetry = parse_json(strParameters).LaunchContentDeliveryManagerStart
+| extend PostStartTasks = parse_json(strParameters).PostStartTasks
+| extend GetLanguageOverlayPackage = parse_json(strParameters).GetLanguageOverlayPackage
+| extend AssignedAccessLogonTaskAgentPreStart = parse_json(strParameters).AssignedAccessLogonTaskAgentPreStart
+| extend AppReadinessPreShellGroup = parse_json(strParameters).AppReadinessPreShellGroup
+| extend RefreshOneSettingsFeatureConfigurations = parse_json(strParameters).RefreshOneSettingsFeatureConfigurations
+| extend AllLogonTasks = parse_json(strParameters).AllLogonTasks
+| extend StartSkydriveSync = parse_json(strParameters).StartSkydriveSync
+| extend CreateEdgeIconIfNeededPostStart = parse_json(strParameters).CreateEdgeIconIfNeededPostStart
+| extend PreShellTasks = parse_json(strParameters).PreShellTasks
+| extend LaunchPeopleExperiencePostStart = parse_json(strParameters).LaunchPeopleExperiencePostStart
+| extend AppReadinessLogonGroup = parse_json(strParameters).AppReadinessLogonGroup
+| extend ResumeAppRestore = parse_json(strParameters).ResumeAppRestore
+| extend WSXRegistryInit = parse_json(strParameters).WSXRegistryInit
+| extend WaitForMSAConnected = parse_json(strParameters).WaitForMSAConnected
+| extend UpdatePCSettingsPreStart = parse_json(strParameters).UpdatePCSettingsPreStart
+| extend FamilyMembersNotification = parse_json(strParameters).FamilyMembersNotification
+| extend AppReadinessNotifyLogonComplete = parse_json(strParameters).AppReadinessNotifyLogonComplete
+| extend InstallPWAs = parse_json(strParameters).InstallPWAs
+| extend DefaultAssociations = parse_json(strParameters).DefaultAssociations
+| extend StartLayoutInit = parse_json(strParameters).StartLayoutInit
+| extend EnterpriseProvisioning = parse_json(strParameters).EnterpriseProvisioning
+| extend PerUserSetup = parse_json(strParameters).PerUserSetup
+| extend PreRoamingTasks = parse_json(strParameters).PreRoamingTasks
+| extend LaunchLockScreenCacheImageRestorePostStart = parse_json(strParameters).LaunchLockScreenCacheImageRestorePostStart
+| extend InitializeBrowserSsoCookie = parse_json(strParameters).InitializeBrowserSsoCookie
+| extend LaunchCustomShell = parse_json(strParameters).LaunchCustomShell
+| extend DownloadEduThemes = parse_json(strParameters).DownloadEduThemes
+| extend LaunchLockAppHostPostStart = parse_json(strParameters).LaunchLockAppHostPostStart
+| extend AppReadinessPreRoamingGroup = parse_json(strParameters).AppReadinessPreRoamingGroup
+| extend PerUserSetupPostStart = parse_json(strParameters).PerUserSetupPostStart
+| extend PerformSignInSuggestionsStart = parse_json(strParameters).PerformSignInSuggestionsStart
+| extend UgradeTaskFlowPolicy = parse_json(strParameters).UgradeTaskFlowPolicy
+| extend DurationMsFromTimestamps = parse_json(strParameters).DurationMsFromTimestamps
+| where isempty(FallBackReason)
+| where isempty(CredSSPSecurityProtocol)
+| where isempty(ClientAuthDeferred)
+| where isempty(Success)
+| where isempty(CredentialType)
+| where isempty( SecurityProtocol)
+| where isempty( LoadBalanceOutcome)
+| where isempty( StartVMOnConnect)
+| where isempty( StartVMOnConnectComputeAPIDuration)
+| where isempty( SessionHostArmComputePath)
+| where isempty( disconnectSource)
+| where isempty( codeSymbolic)
+| where isempty( NetworkConnectivityLevel)
+| where isempty( ServiceConnectivityError)
+| where isempty( ServiceConnectivityStatus)
+| where isempty( DisconnectCode)
+| where isempty( WinLogon_Total)
+| where isempty( UserLogon)
+| where isempty( UpdatePCSettingsPreStart)
+| where isempty( DurationMsFromTimestamps)
+| where strParameters contains "json"
+| project TimeGenerated, Name, UserName, Parameters, strParameters
+//| extend FallBackReason = parse_json(strParameters).FallbackReason
+| extend rawjson = parse_json(tostring(strParameters))
+
