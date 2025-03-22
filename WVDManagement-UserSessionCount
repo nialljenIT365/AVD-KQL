@@ -1,0 +1,7 @@
+WVDManagement
+| where Route == "ArmHostPool::GetAllUserSessions"
+| extend SplitAll=split(_ResourceId, '/')
+| extend HostPool=SplitAll[8]
+| where HostPool contains "neu_prd_sspersistent"
+| where HostPool contains "prd" or HostPool contains "uat" or HostPool contains "prod"
+//| summarize ObjectsTotals = avg(ObjectsFetched) by tostring(HostPool), bin(TimeGenerated, 30m)
