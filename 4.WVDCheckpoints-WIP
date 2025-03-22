@@ -1,0 +1,29 @@
+WVDCheckpoints
+| where UserName == "Niall.Jennings@abrdn.com"
+| extend GatewayUrl = strcat("ClientInitiatedClientConnection:" , extract(@"gatewayUrl:\s*(https?://\S+)", 1, Name))
+| extend RawParams = tostring(Parameters)
+| extend Rawjson = tostring(Parameters.json)
+| extend TurnIP = strcat("RDStackInitiatedTurnRelay:" , extract(@'"turn"\s*:\s*\[\s*"((?:\d{1,3}\.){3}\d{1,3})"', 1, Rawjson))
+| extend StartVMOnConnect = tostring(Parameters.StartVMOnConnect)
+| extend LoadBalanceOutcome = tostring(Parameters.LoadBalanceOutcome)
+| extend EventType = case(
+    GatewayUrl contains "https://", GatewayUrl,
+    StartVMOnConnect == "VMStarting", "ClientInitiatedStartVMOnConnect",
+    LoadBalanceOutcome == "Disconnected", "ClientInitiatedReconnect",
+    LoadBalanceOutcome == "Active", "ClientInitiatedAutoReconnect",
+    LoadBalanceOutcome == "NewSession", "ClientInitiatedNewSession",
+    Name == "TransportConnecting", "RDStackInitiatedTransportConnect",
+    Name == "ShortpathPublicConfigurationReceived", TurnIP,
+    Name == "OrchestrationCompleted", "ClientInitiatedOrchestrationCompleted",
+    LoadBalanceOutcome  // fallback
+)
+| project TimeGenerated, UserName, Name, Source, EventType, CorrelationId, _ResourceId, Parameters, RawParams
+| sort by TimeGenerated desc
+| where EventType contains "Client"
+//| where Param_Outcome == "Disconnected"
+//| where Name contains "RdpStackLogon"
+//| where Name contains "TransportConnecting"
+//| where Name contains "LoadBalancedNewConnection"
+//| where Name contains "Discon"
+//| where Name contains "LoadBalanced"
+//| where Name contains "OnClient"
