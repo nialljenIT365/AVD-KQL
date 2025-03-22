@@ -1,0 +1,5 @@
+WVDCheckpoints
+| extend 
+    ResourceGroup = extract(@"[rR]esource[Gg]roups/([^/]+)", 1, _ResourceId),
+    HostPoolName = extract(@"hostpools/([^/]+)", 1, _ResourceId)
+| distinct HostPoolName, ResourceGroup
