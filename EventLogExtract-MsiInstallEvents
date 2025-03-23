@@ -1,0 +1,49 @@
+# Function to resolve User SID to a Username
+function Get-UsernameFromSID {
+    param (
+        [string]$userSID
+    )
+ 
+    try {
+        # Attempt to resolve the SID to a username
+        $username = (New-Object System.Security.Principal.SecurityIdentifier($userSID)).Translate([System.Security.Principal.NTAccount]).Value
+    } catch {
+        $username = "Unknown User"
+    }
+ 
+    return $username
+}
+ 
+# Function to retrieve Event ID 11707 and 11724 from the Application Log and return the full message along with UserSID and Username
+function Get-MsiInstallerEvents {
+    $eventIDs = @(11707, 11724)  # Array of event IDs to check for
+    $logName = "Application"
+ 
+    # Query the event log for Event ID 11707 and 11724
+    $events = Get-WinEvent -LogName $logName | Where-Object { $eventIDs -contains $_.Id } | ForEach-Object {
+        $xml = [xml]$_.ToXml()  # Convert the event to XML format for easier parsing
+ 
+        # Extract Event Data
+        $eventTime = $_.TimeCreated
+        $userSID = $xml.Event.System.Security.UserID  # Extract the User SID from the XML
+        $message = $_.Message  # Get the full message directly
+        $username = Get-UsernameFromSID -userSID $userSID  # Resolve SID to Username
+ 
+        # Return the desired fields as a custom object
+        [PSCustomObject]@{
+            TimeCreated = $eventTime
+            EventID     = $_.Id  # Include Event ID to distinguish between 11707 and 11724
+            UserSID     = $userSID
+            Username    = $username  # Add Username to the output
+            Message     = $message
+        }
+    }
+ 
+    return $events
+}
+ 
+# Execute the function and display results
+$msiEvents = Get-MsiInstallerEvents
+ 
+# Display the results in a formatted table
+$msiEvents | Format-Table TimeCreated, EventID, UserSID, Username, Message -AutoSize
