@@ -1,0 +1,18 @@
+
+let binSize = 30s; //change bin size based on time requirements
+let timeRangeStart = now(-4h);
+let timeRangeEnd = now();
+let filterSubstring = "ALL"; // Replace with the desired substring, or set to "ALL" for all computers
+Perf
+| where TimeGenerated between (timeRangeStart..timeRangeEnd)
+| where ObjectName == "Processor Information" and CounterName == "% Processor Time"
+| where filterSubstring == "ALL" or tostring(Computer) contains filterSubstring
+| summarize AVG_CPU_Utilization_per = round(avg(CounterValue), 2),
+            MAX_CPU_Utilization_per = round(max(CounterValue), 2),
+            MIN_CPU_Utilization_per = round(min(CounterValue), 2),
+            MED_CPU_Utilization_per = round(percentile(CounterValue, 50), 2),
+            ItemsPerTimeBin_int = count() // Counting the number of entries per time bin
+  by BinnedTime = bin(TimeGenerated, binSize), Computer, Date = format_datetime(TimeGenerated, 'yyyy-MM-dd')
+| extend Time = format_datetime(BinnedTime, 'HH:mm:ss') // Format the binned time as HH:mm:ss
+| where MAX_CPU_Utilization_per >=70 
+| project Date, Time, Computer, AVG_CPU_Utilization_per, MED_CPU_Utilization_per, MAX_CPU_Utilization_per, MIN_CPU_Utilization_per, ItemsPerTimeBin_int
