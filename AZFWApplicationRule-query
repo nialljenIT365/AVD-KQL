@@ -1,0 +1,6 @@
+AZFWApplicationRule
+| where SourceIp startswith "10.110.88.65"
+//| where Action contains "Deny"
+| where Fqdn contains "wvd.microsoft.com"
+//| order by SourceIp
+//| summarize Count = count() by SourceIp, bin(TimeGenerated, 1d)
