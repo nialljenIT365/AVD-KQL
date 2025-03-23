@@ -1,0 +1,9 @@
+WVDConnections 
+| where TimeGenerated > ago(daysAgo)
+| where State == "Connected" 
+| project _ResourceId, UserName 
+| project-rename Hostpool = _ResourceId 
+| summarize DistinctUsers= dcount(UserName) by Hostpool 
+| extend HostPool=toupper(strcat(split(Hostpool, "/")[4], ".", split(Hostpool, "/")[8])) 
+| project HostPool, DistinctUsers
+| where HostPool contains "sea_prd_sspersistent"
