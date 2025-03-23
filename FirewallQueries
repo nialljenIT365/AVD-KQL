@@ -10,3 +10,117 @@ AZFWApplicationRule
 | where Action contains "Deny"
 | where SourceIp contains "10.111.88.17"
 | limit 1000
+
+
+
+
+// Chart of App Rule blocks in last x days from AVD Source IPs, grouped by Destination FQDN
+
+let ReportDays = timespan(7d);
+
+let AVDvNets = dynamic([
+
+    "10.111.80.159"
+
+    ]);
+
+AZFWNetworkRule
+
+| where TimeGenerated >= ago(ReportDays)
+
+| where Action == "Deny"
+
+| where ipv4_is_in_any_range(SourceIp, AVDvNets)
+
+//| where Protocol contains "ICMP Type=8"
+
+//| where SourcePort == 53
+
+| where DestinationIp startswith "20.202"
+
+//| where DestinationPort == 51632
+
+//| where Protocol contains "UDP"
+
+//| summarize Count = count() by DestinationIp, bin(TimeGenerated, 7d)
+
+//| sort by Count
+ 
+Add and remove // where required. 
+ 
+And this one has all AVD subnets etc....
+// Chart of App Rule blocks in last x days from AVD Source IPs, grouped by Destination FQDN
+
+let ReportDays = timespan(7d);
+
+let AVDvNets = dynamic([
+
+    //"10.110.80.0/20",
+
+    //"10.111.80.0/20",
+
+    //"10.210.32.0/22",
+
+    //"10.211.32.0/22",
+
+    //"10.110.96.0/20",
+
+    //"10.111.96.0/20",
+
+    //"10.210.2.0/23",
+
+    //"10.211.2.0/23",
+
+    //"10.158.2.0/23",
+
+    //"10.159.2.0/23"
+
+    //"10.110.6.0/23",
+
+    //"10.111.6.0/23",
+
+    //"10.210.6.0/23",
+
+    //"10.211.6.0/23"
+
+    //"10.210.6.84",
+
+    //"10.211.6.84",
+
+    //"10.210.6.132",
+
+    //"10.111.0.132",
+
+    //"10.110.0.132",
+
+    //"10.210.0.132",
+
+    "10.111.80.159"
+
+    //"10.210.34.46"
+
+    ]);
+
+AZFWNetworkRule
+
+| where TimeGenerated >= ago(ReportDays)
+
+| where Action == "Deny"
+
+| where ipv4_is_in_any_range(DestinationIp, AVDvNets)
+
+//| where Protocol contains "ICMP Type=8"
+
+//| where SourcePort == 53
+
+//| where DestinationIp startswith "10."
+
+//| where DestinationPort == 51632
+
+//| where Protocol contains "UDP"
+
+//| summarize Count = count() by DestinationIp, bin(TimeGenerated, 7d)
+
+//| sort by Count
+ 
+ 
