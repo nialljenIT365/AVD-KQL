@@ -1,0 +1,7 @@
+WVDConnectionGraphicsDataPreview
+| join kind=leftouter (
+    WVDConnections
+    | where State == "Connected"
+) on CorrelationId
+| where UserName contains "eoin"
+| sort by TimeGenerated desc
