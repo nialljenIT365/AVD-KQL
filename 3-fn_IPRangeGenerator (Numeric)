@@ -1,0 +1,9 @@
+let
+    GenerateRange = (start as number, finish as number) as list =>
+    let
+        // Generate a list of numbers from start to finish
+        numberList = if finish >= start then List.Numbers(start, finish - start + 1) else {}
+    in
+        numberList
+in
+    GenerateRange
