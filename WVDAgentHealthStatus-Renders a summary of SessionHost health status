@@ -1,0 +1,28 @@
+// AVD Health Checks of SessionHost 
+// Renders a summary of SessionHost health status. 
+let MapToDesc = (idx:long) {
+    case(idx == 0,  "DomainJoin",
+         idx == 1,  "DomainTrust",
+         idx == 2,  "FSLogix",
+         idx == 3,  "SxSStack",
+         idx == 4,  "URLCheck",
+         idx == 5,  "GenevaAgent",
+         idx == 6,  "DomainReachable",
+         idx == 7,  "WebRTCRedirector",
+         idx == 8,  "SxSStackEncryption",
+         idx == 9,  "IMDSReachable",
+         idx == 10, "MSIXPackageStaging",
+         "InvalidIndex")
+};
+WVDAgentHealthStatus
+| extend var = tostring(SessionHostHealthCheckResult)
+| extend result = parse_json(var)
+| mv-expand result
+| extend HealthCheckName = tolong(result.HealthCheckName)
+| extend HealthCheckResult = tolong(result.HealthCheckResult)
+| extend HealthCheckDesc = MapToDesc(HealthCheckName)
+| summarize count(), min(TimeGenerated), max(TimeGenerated) by HealthCheckResult, HealthCheckName, HealthCheckDesc, SessionHostName
+| where HealthCheckDesc == "SxSStack" or HealthCheckDesc == "GenevaAgent" or HealthCheckDesc == "IMDSReachable" or HealthCheckDesc == "URLCheck" 
+| where HealthCheckResult != 1
+| where SessionHostName contains "M01PSSPI0030"
+//| where HealthCheckDesc == "URLCheck"
