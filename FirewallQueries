@@ -1,0 +1,12 @@
+AZFWNetworkRule
+| where Action contains "Deny"
+| where SourceIp contains "10.111.88.17"
+| where DestinationIp !contains "20.202"
+| limit 1000
+ 
+AND
+ 
+AZFWApplicationRule
+| where Action contains "Deny"
+| where SourceIp contains "10.111.88.17"
+| limit 1000
