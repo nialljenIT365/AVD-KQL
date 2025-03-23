@@ -1,0 +1,6 @@
+WVDConnectionNetworkData
+| join kind=innerqunique (    
+    WVDErrors
+    )
+    on CorrelationId
+| where ActivityType == "Connection"
