@@ -1,0 +1,18 @@
+WVDConnectionNetworkData
+| join kind=leftouter (
+    WVDConnections
+    | where State == "Connected"
+    | extend Protocol = iff(UdpUse in ("0","<>"),"TCP","UDP")
+) on CorrelationId
+| summarize arg_max(TimeGenerated, *) by UserName
+| where isnotempty(UserName)
+| project TimeGenerated, UserName, ClientType, ClientVersion, ClientSideIPAddress, SessionHostName, ConnectionType, Protocol, EstAvailableBandwidthKBps, EstRoundTripTimeInMs
+| extend ClientType = iff(ClientType == "com.microsoft.rdc.windows.msrdc.x64", "Windows RD Client x64 (MSI)",
+                    iff(ClientType == "com.igel.rdc.linux", "IGEL",
+                    iff(ClientType == "com.microsoft.rdc.windows.store", "Windows RD Client Store App",
+                    iff(ClientType == "com.microsoft.rdc.html", "Web Browser (HTML5)",
+                    iff(ClientType == "com.microsoft.rdc.macos", "MAC OS",
+                    iff(ClientType == "com.microsoft.rdc.windows.msrdc.arm64", "Windows RD Client ARM 64 (MSI)",
+                    iff(ClientType == "com.microsoft.rdc.ios", "iOS",
+                    iff(ClientType == "com.microsoft.rdc.windows.msrdc.msix.x64", "Windows RD Client x64 (MSIX)", "Other"))))))))
+| where SessionHostName contains "M01PMSNI"
